@@ -275,8 +275,14 @@ El método `start` no hace que se ejecute directamente el método `run` del hilo
 
 
 - Haciendo que una clase existente implemente la interfaz ***Runnable***
-- 
-- Clase Thread con sus métodos
+  - Cuando necesitamos que un hilo ejecute el método run de un objeto de cualquier otra clase que no esté derivada de **Thread**, tendremos que:
+    - 
+
+
+
+### Clase Thread con sus métodos
+
+---
 
 ```java
 public class Thread extends Object implements Runnable
