@@ -270,18 +270,20 @@ El método `start` no hace que se ejecute directamente el método `run` del hilo
 > >
 > > El método `start()` es el que se encarga de presentar el hilo al planificador.
 > >
-> > Si llamamos al método `run` sin llamar antes a `start` entonces el hilo no va a ser conocido por el planificador y esto conlleva a varios problemas, por ello esto está considerado como un error gravísimo.
+> > Si llamamos al método `run` sin llamar antes a `start` entonces el hilo no va a ser conocido por el planificador y esto va a ocasionar varios problemas, por ello esto está considerado como un error gravísimo.
 
 
 
 - Haciendo que una clase existente implemente la interfaz ***Runnable***
+- 
+- Clase Thread con sus métodos
 
 ```java
-public class Hilo extends Object implements Runnable
+public class Thread extends Object implements Runnable
 {
     //Atributos
     //Constructores
-    Hilo(argumentos);
+    Thread(argumentos);
     //Metodos
 }
 ```
@@ -332,6 +334,8 @@ public class Hilo extends Object implements Runnable
 > > Una clase que implemente la interfaz **Runnable** tiene que sobrescribir el método run aportado por está, de ahí que **Thread** proporcione el método aunque no haga nada. **Run()** contendrá el código que debe ejecutar el hilo.
 >
 > > Los métodos como **stop, suspend, resume y runFinalizersOnExit** han sido desaprobados por lo inseguros que son.
+> >
+> > El método `yield()` el hilo sale de forma voluntaria del estado de ejecución, pero puede darse el caso de que la cola de hilos este vacía, en ese caso el planificador no lo sacará de ejecución.
 
 
 
