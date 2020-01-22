@@ -189,9 +189,11 @@ public static void inicializarHilos()
         Crearemos los hilos suponiendo que ya tenemos sus clases creadas
         */
     
-    ClaseHilo hiloNuevo = new ClaseHilo(); // Aqui el hilo se encontraria en 											  //  Estado Nuevo
+    ClaseHilo hiloNuevo = new ClaseHilo(); // Aqui el hilo se encontraria en 
+										  //  Estado Nuevo
     
-    hiloNuevo.start() // Con esta orden estamos haciendo que el planificador sepa 					   		 //  acerca de la existencia de ese hilo y el hilo pasa a
+    hiloNuevo.start() // Con esta orden estamos haciendo que el planificador sepa 
+					 //  acerca de la existencia de ese hilo y el hilo pasa a
         			//   Estado Preparado
 }
 ```
@@ -286,7 +288,7 @@ public class Hilo extends Object implements Runnable
 
 
 
-#### Atributos:
+### Atributos:
 
 ---
 
@@ -299,7 +301,7 @@ public class Hilo extends Object implements Runnable
 
 
 
-#### Métodos:
+### Métodos:
 
 ---
 
