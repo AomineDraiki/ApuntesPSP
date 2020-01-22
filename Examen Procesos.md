@@ -433,5 +433,107 @@ public class Thread extends Object implements Runnable
 >> Una vez no haya programas ejecutándose no tiene sentido seguir teniendo los demonios ejecutándose.
 >>
 >> Java finalizará una vez que todos los hilos que queden en ejecución sean demonios.
+
+
+
+#### Ejemplo Hilo Demonio
+
+---
+
+```java
+public class CDemonio extends Thread
+{
+    public CDemonio()
+    {
+        setDaemon(true);
+        start();
+    }
+    
+    public void run()
+    {
+        chat bip = '\u0007'
+        while(true)
+        {
+            try
+            {
+                sleep(1000);
+            }
+            catch(InterruptedException e)
+            {
+             System.out.println(bip);
+          	}
+        }
+    }
+}
+```
+
+>Para iniciar este hilo solamente tendríamos que crear un objeto de esta clase
 >
+>```java
+>CDemonio dbip = new CDemonio();
+>```
+
+
+
+### Finalizar un hilo
+
+---
+
+- Un hilo termina de forma natural cuando su método run devuelve el control.
+  - El hilo pasa al **estado muerto** y no hay forma de salir de este estado.
+
+> ***IMPORTANTE***
 >
+> > Si queremos acceder a los métodos de ese hilo ya muerto tendríamos que crear un nuevo objeto hilo y enviarle el mensaje **start**.
+
+
+
+
+
+### Controlar un hilo
+
+---
+
+- Un hilo durante su ciclo de vida está transitando por los estados: 
+  - **Nuevo**
+  - **Preparado**
+  - **En Ejecución**
+  - **Bloqueado**
+  - **Muerto**
+
+
+
+- El método `isAlive()` de **Thread** devuelve **True** si el hilo que recibe este mensaje ha sido arrancado (**start**) y todavía no ha muerto.
+- Normalmente es el planificador el que controla cuándo el hilo debe estar en ejecución y cuándo estar en detenido, pero en ocasiones tendremos que ser nosotros los que programemos las circunstancias bajo las cuales un hilo pueda pasar a ejecución, o bien debe pasar a de ejecución a alguno de los estados **preparado**  o **bloqueado** .
+
+
+
+#### Preparado
+
+---
+
+- A un hilo en ejecución se le puede enviar el mensaje `yield`para que se mueva al estado **preparado** y ceda así la UCP a otros hilos. Si el planificador observa que no hay ningún hilo esperando por la UCP, permitirá que le hilo que iba a ceder la UCP continúe ejecutándose.
+- El método `yield` es `static`, por lo tanto, opera sobre el hilo que actualmente se esté ejecutando.  Cuando necesite invocarlo basta con que escriba: `Thread.yield()`
+
+#### Bloqueado
+
+---
+
+` 	n = System.in.read()`
+
+- Si el hilo que ejecuta **read** se mantuviera en el estado de ejecución, la UCP quedaría ocupada y no se podría realizar nada más.
+- Un hilo que gentilmente abandona el estado de ejecución hasta que se dé la ocurrencia que lo detiene se dice que está bloqueado.
+- Java implementa muchos de los bloques que ocurren durante una operación de entrada/salida llamando a los métodos `sleep` y `wait`
+
+
+
+#### Dormido
+
+---
+
+- Un hilo en este estado pasa tiempo sin hacer nada, por lo tanto, no utiliza la UCP
+
+- Una llamada al método `sleep` solicita que el hilo actualmente en ejecución cese durante un tiempo especificado.
+  - `Thread.sleep(milisegundos);`
+  - `Thread.sleep(milisegundos, nanosegundos);`
+- Se puede observar que el método `sleep` al igual que `yield` es **static**
