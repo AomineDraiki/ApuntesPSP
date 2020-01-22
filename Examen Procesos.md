@@ -262,8 +262,6 @@ El método `start` no hace que se ejecute directamente el método `run` del hilo
 
 
 
-
-
 > ***IMPORTANTE***
 
 > > Para poder lanzar un hilo, primero tenemos que construir un objeto  de esa clase y después enviar a dicho objeto el mensaje `start()`
@@ -276,7 +274,55 @@ El método `start` no hace que se ejecute directamente el método `run` del hilo
 
 - Haciendo que una clase existente implemente la interfaz ***Runnable***
   - Cuando necesitamos que un hilo ejecute el método run de un objeto de cualquier otra clase que no esté derivada de **Thread**, tendremos que:
-    - 
+    - 1- El objeto debe ser una clase que implemente la interfaz **Runnable**, ya que es esta la que aporta el método `run` .
+    - 2- Sobrescribir el método run con las sentencias que tiene que ejecutar el hilo.
+    - 3- Crear un objeto de esa clase.
+    - 4- Crear un objeto de la clase **Thread** pasando como argumento al constructor, el objeto cuya clase incluye el método `run`.
+    - 5- Invocar al método `start` del objeto **Thread**.
+
+```java
+public class ContadorAtras implements Runnable // Este seria el primer paso a cumplir
+{
+    // El tercer paso seria el objeto que creamos en el "main"...
+    private Thread cuentaAtras;
+    
+    public ContadorAtras(String nombre)
+    {
+        cuentaAtras = new Thread(this); // Cuarto paso
+        
+        if (nombre != null) setName(nombre);
+        cuentaAtras.start(); // Quinto Paso
+    }
+    
+    public ContadorAtras(){this(null);} 
+    
+    public void run() // Segundo paso a cumplir
+    {
+        for (int i = 1; i <= 1000; i++)
+        {
+            System.out.print(getName()+" " + i + "\r" );
+        }
+    }
+}
+```
+
+
+
+### Información
+
+---
+
+Para poder lanzar un hilo asociado a la clase anterior (ContadorAtras), primero tenemos que construir un objeto de la misma, después un objeto de la clase **Thread** pasando como argumento el objeto de la clase y finalmente, enviar el objeto **Thread** el mensaje **start**.
+
+
+
+> ***IMPORTANTE***
+>
+> > Si el método `run` es parte de la interfaz de una clase cualquiera, tiene acceso a todos los miembros de esa clase, cosa que no ocurre si pertenece a una subclase de **Thread**. Ya que Java no permite la herencia múltiple; entonces , si escribimos una clase derivada de **Thread**, es clase no puede ser a la vez una subclase de otra clase.
+> >
+> > La clase ContadorAtras no es un hilo, está asociada con uno.
+> >
+> > El hilo primario no termina mientras sus hilos hijos no terminen.
 
 
 
@@ -347,3 +393,45 @@ public class Thread extends Object implements Runnable
 
 
 
+### Hilo Demonio
+
+---
+
+- No forma parte de la esencia del programa, sino de la máquina de Java.
+- Son usados generalmente para prestar servicios en segundo plano.
+
+
+
+#### Como se crea un hilo demonio?
+
+---
+
+- Solamente tenemos que usar el método `setDaemon()` y ponerlo a true
+
+  - ``` java
+    hilo.setDaemon(true);--
+    ```
+
+- Si un hilo es demonio, entonces cualquier hilo que este cree será un hilo demonio.
+
+
+
+#### Saber si un hilo es demonio
+
+---
+
+- Tendremos que usar el método `isDaemon()`, este método nos devolverá **true** si el hilo es demonio y **false**  si no lo es.
+
+  - ```java
+    boolean bandera = hilo.isDaemon()
+    ```
+
+>***IMPORTANTE***
+>
+>> Java normalmente permanece en ejecución hasta que todos los hilos en el sistema finalizan su ejecución. Sin embargo, los hilos demonios son una excepción, ya que su labor es proporcionar servicios a otros programas.
+>>
+>> Una vez no haya programas ejecutándose no tiene sentido seguir teniendo los demonios ejecutándose.
+>>
+>> Java finalizará una vez que todos los hilos que queden en ejecución sean demonios.
+>
+>
