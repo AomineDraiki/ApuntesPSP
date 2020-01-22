@@ -1,0 +1,576 @@
+<?xml version="1.0" ?>
+<cherrytree>
+	<node custom_icon_id="0" foreground="" is_bold="False" name="2 DAM" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710206.78" ts_lastsave="1579710227.82" unique_id="1">
+		<rich_text></rich_text>
+		<node custom_icon_id="28" foreground="#0000ff" is_bold="True" name="PSP" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710227.82" ts_lastsave="1579710253.3" unique_id="2">
+			<rich_text></rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="ApuntesSucio" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710237.06" ts_lastsave="1579710263.41" unique_id="3">
+				<rich_text></rich_text>
+				<node custom_icon_id="0" foreground="" is_bold="False" name="SeccionesExamen" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710263.41" ts_lastsave="1579710490.93" unique_id="5">
+					<rich_text></rich_text>
+					<node custom_icon_id="0" foreground="" is_bold="False" name="Definicion de hilo" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710279.4" ts_lastsave="1579710374.73" unique_id="6">
+						<rich_text>	- Una secuencia de código que se ejecuta dentro del contexto de un proceso
+	
+	- Los hilos pertenecen a un proceso y si ese proceso tiene varios hilos entonces comparten la misma imagen de memoria.
+	
+	- Los hilos que no comparten recursos se ejecutan de forma asincronica
+	
+	-	Si comparten recursos	
+	    - Se ejecutan al mismo tiempo su ejecución tiene que ser sincronizada (Tarea de diseño programador)</rich_text>
+					</node>
+					<node custom_icon_id="0" foreground="" is_bold="False" name="Preguntas Examen" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1579710490.93" ts_lastsave="1579713513.78" unique_id="7">
+						<rich_text>QUE ES UN HILO?
+
+- Hilo 
+	- Secuencia de codigo en ejecucción dentro del contexto de un proceso, en el mismo espacio de direcciones. {C.Programa | Registros de la UCP UAL}{Estado}
+	- Se ejecuta al mismo tiempo que otros hilos del proceso al que pertenece, atendido por un núcleo {Paralelismo Real}
+
+Proceso
+	- Es un arbol enario de hilos.
+	- Es almenos un hilo.
+
+
+- Secuencia de código que se ejecuta dentro del contexto de un proceso
+
+-- Cola de hilos preparados son los hilos de mi proceso estan en preparados pero no ejecutandose debido a que no hay nucleo disponible.    
+    
+-- Los procesos no hay nada que les impida estar en ejecucion pero como hay otro ya ejecutandose no pueden.
+
+-- Para que dos hilos compartan el mismo recurso uno de ellos le tiene que pasar su referencia.
+
+-- Un hilo tiene memoria, tiene estado, contexto --&gt; En ejecución dentro del contexto de un proceso
+
+-- Proceso es un árbol de N hilos.
+	-- Hay almenos un hilo primario que es el nodo raíz de ese árbol.
+	-- Por defecto los procesos son de un solo hilo.
+	-- El Sistema Operativo, es decir el planificador de hilos (Conjunto de rutinas que se estan ejecutando concurrentemente)
+	-- Colas de hilos dentro de un proceso.
+	-- Para ese proceso tengo estructuras lógicas, (El estado listo de un hilo se llama RunAble)
+	
+- Cualquier hilo puede pasar por estado bloqueado o estado dormido, pero por estado esperando solo pasan los hilos que comparten el mismo recurso.	
+	
+- Cada hilo creado por un hilo demonio es un hilo demonio.
+
+- El hilo siempre es una instancia de la clase Thread, cualquier instancia de esta clase es un hilo.
+
+- Un proceso en ejecucion es un arbol de hilos que esta cambiando.
+
+
+
+*****************************************************************
+	
+VENTAJAS:
+
+- La creaccion de hilos para el sistema operativo es menos costosa que la creaccion de procesos.
+
+
+
+*****************************************************************
+	
+QUE PASA CUANDO CREAMOS MAS HILOS:
+
+- Si se le manda al hilo primario la orden de crear otro hilo, ese otro hilo se crea en el mismo espacio de direcciones que el hilo primario.
+	
+
+*****************************************************************
+
+DEFINICION DE PROCESO:
+
+- Proceso == Árbol enario de hilos, un proceso es almenos un hilo, y se llama hilo primario.
+
+- El Sistema Operativo cuando crea el proceso lo que hace es crear el primer hilo (hilo primario) y le asigna un espacio de direcciones.
+ - Logicamente ese hilo primario es el nodo raiz.
+ 
+ - Ese hilo tiene creado un buffer asociado al teclado, un buffer de salida asociado al monitor y un buffer de errores.
+
+****************************************************************
+
+EL MOMENTO DEL CÓDIGO
+
+    - Forma parte del estado de un proceso y es un registro de la unidad de control.
+    - El contador actual es quien posee el momento del código
+    
+ *****************************************************************
+    
+COMO FUNCIONAN LOS HILOS?
+
+-- Si yo en un instante dado tengo lanzados en un proceso menos hilos que nucleos disponibles supongo que tengo todos en ejecución, cada uno esta siendo atendido por un núcleo. Cola hilos preparados está vacia.
+
+-- Para entrar en ejecución siempre tiene que ser desde estado preparado.
+
+-- Si se lanzan mas hilos que nucleos se monta un problema ya que hay que atender a los hilos en estado preparado, hay que hacer avanzar esa cola ya que si no hay hilos que no se pueden ejecutar.  Esto es la 	 ejecución concurrente
+
+
+-- Solo hay ejecucion concurrente si he lanzado mas hilos que nucleos
+
+			|
+			| - a) 	- No comparten ningún recurso
+			|
+			| 		- Se ejecutan al mismo tiempo siempre que tengan núcleo (Asincrónicamente)
+			|
+-- hilos    | - b)  - Comparten algún recurso
+			|		
+			|		- Se ejecutan al mismo tiempo, pero nosotros tenemos que sincronizarlos
+			|
+			|
+			
+-- Los hilos se ejecutan al mismo tiempo cuando el proceso al que pertenecen esta en ejecución.
+
+-- Cuando el proceso al que pertenecen esta en estado de ejecucion, sabemos que se produce un cambio de contexto es decir se restaura el estado de ese proceso, es decir se restauran todos los hilos de ese proceso al mismo tiempo.
+			
+-- Si en un instante dado, hay lanzados más hilos que núcleos tengo, seguro que los hilos se ejecutan concurrentemente.
+
+-- El planificador entra en escena cuando hay más hilos que núcleos por lo cual, el planificador de hilos los ejecuta de forma concurrente.
+
+
+- Cada hilo tiene su ciclo independiente a los otros, es decir que si tenemos un hilo padre que arranca 3 hilos mas esos hilos pueden estar en ejecución o bloqueado independientemente de como esten los otros.
+
+
+-Cuando yo creo un hilo tiene prioridad normal, el cual es su valor por defecto.
+
+
+- Esa banderita que tiene el hilo le dice al planificador, &quot;Mira tu vigila, cuando todos los hilos vivos que queden en un proceso, todos tengan la banderita de demonio a true, destruyelos&quot;
+
+- El planificador de hilos solo entra en ejecucion cuando tenemos más hilos que nucleos.
+
+- El hilo padre puede terminar un hilo hijo, puede pedir el nombre del hilo hijo, puede pedir información 
+- Los hilos hijo nacen con la prioridad del padre.
+- Esa cola de hilos cuando se atiende? -- Solo se atiende cuando ese proceso esta en ejecución.
+
+Un proceso puede tener n hilos corriendo:
+	-  al mismo tiempo --&gt; Paralelismo Real
+	- + hilos que núcleos --&gt; se ejecutan concurrentemente
+
+*****************************************************************
+QUE ES EL NIVEL?
+
+- Nivel --&gt; El nivel es es la distancia en nodos desde el principal hasta el que se encuentre el hijo.
+
+
+*****************************************************************
+
+ESTADOS DE UN HILO:
+
+-- Un hilo pasa a estado dormido cuando se ejecuta una llamada al método sleep() o join() de la clase Thread
+
+- Un hilo esta en estado nuevo cuando aun no hemos llamado al metodo start para el (Ya que el sistema operativo no tiene ese hilo controlado, ni sabe que existe)
+
+.start()
+	- Este método le presenta el hilo al planificador de hilos, es decir, el planificador tiene un nuevo hilo que atender.
+	
+
+
+
+*****************************************************************
+
+DIFERENCIA ENTRE HILOS Y PROCESOS?
+
+-- Diferencia con los procesos es que:
+	-- El hilo comparte con todos los demás hilos del mismo proceso su imagen de memoria (Pueden acceder a todos los recursos del proceso)
+		-- Es decir puede acceder a una coleccion, a un array, a un fichero abierto.			
+			
+-- Los n hilos de un proceso se estan ejecutando al mismo tiempo y eso es lo que me da MULTITAREA (Paralelismo Real)
+	-- Se ejecuta un hilo en cada núcleo, es decir uno en cada unidad de control.
+
+La tarea es la misma, la sentencia de codigo que ejecuta es la misma, la diferencia en el caso de proceso se ha arrancado otro proceso y tiene otra imagen de memoria y entonces nunca seran hilos cooperantes,
+los procesos no pueden ir al mismo recurso nunca, pueden comunicarse (los procesos).
+
+Sin embargo los hilos pueden leer del mismo buffer.
+
+- En los procesos podemos suponer que la cola nunca esta vacia.
+
+- En los hilos todo esto pasa dentro de un proceso podemos suponer que la cola esta vacia, que tenemos nucleos libres.
+
+
+*****************************************************************
+REQUISITOS HARDWARE Y SOFTWARE
+
+-- Requisitos previos para aplicación multiHilo:
+	-- Hardware:
+		-- Un procesador de varios núcleos.
+	-- Software:
+		-- Que el Sistema Operativo sea multihilo.
+		-- Que la aplicación que hemos diseñado sea multihilo.
+		
+	
+***************************************************************	
+TIPOS DE HILOS:
+
+    - NORMALES
+    
+    -- Los n hilos que tiene un proceso
+	-- Ejecutandose asincronicamente (No comparten ningun recurso)
+    
+    - Hilos independientes se ejecutan al mismo tiempo y se ejecutan asincronicamente.
+    
+  - Hilos independientes
+	- No comparten ningun recurso.
+	- No comparten ningun objeto en memoria de ningun tipo.
+	- Se ejecutan al mismo tiempo
+	- Se ejecutan asincronicamente
+    
+    			- Hilos que no comparten recursos	- Hilos independientes --&gt; Ejecución asincronica
+    
+    - COOPERANTES
+    
+    -- Los hilos cooperantes son los hilos que comparten algun recurso (1 o n). 
+    
+    -- Solo se pasa por Esperando cuando los hilos comparten recursos.
+    
+    -- Por wait() solo van a ir los hilos cooperantes (Es decir hilos que comparten algun recurso, es decir acceden a la misma direccion de memoria).
+
+-- Yo soy un hilo y creo un objeto, ya lo tengo es mio y se donde esta tengo su referencia y su tipo de dato ya no hay que tener nada mas, si yo a otro hilo le paso lo mismo su referencia y su tipo de dato
+
+-- El propietario van a ser todos los hilos que tengan esa referencia
+
+-- El programdor:
+	-- Los tiene que o bien que sincoronizar.
+	-- O bien que secuenciar
+	-- O bien que sincronizarlos y secuenciarlos
+	
+-- Los hilos cooperantes --&gt; No pueden ejecutarse a su bola, tenemos que secuenciarlos o sincronizarlos o en ciertas ocasiones las dos cosas.
+
+- Hilos que realizan la misma tarea (Las secciones criticas me resuelven la tarea)
+- Hilos que realizan tareas distintas (Tendre que sincronizarlos y secuenciarlos)
+- Esto se soluciona con {secciones, wait, notify/notify all}
+
+- Objeto / Argumento en el constructor del hilo.
+
+- Se le pasa la misma referencia, ESTOS HILOS SE TIENEN QUE EJECUTAR DE FORMA SINCRONIZADA. 
+- Esta tarea la tenemos que realizar nosotros, se define en el código fuente
+- Definir secciones criticas en el código
+- Seccion critica --&gt; Es un bloque de código:
+- Que se define como atómico, es decir siempre se ejecuta entero.
+
+
+
+- Hilos Cooperantes
+	- Comparten algun recurso, almenos 1, es decir, comparten un objeto en memoria.
+	- Necesitan ser controlados por secciones criticas.
+	- No se pueden ejecutar asincronicamente. {Tenemos que sincronizarlos, cuando acceden al recurso y para que acceden {Al recurso que comparten}}
+	
+
+	- Tipos de hilos Cooperantes:
+		- Los que pertenecen a la misma clase. {Sincronizarlos}
+			- 2 formas:
+				- Dentro de la clase.
+				- Dentro del método abro un bloque sincronizado.
+
+
+		- Son de distintas clases --&gt; Esto implica que las tareas son distintas --&gt; Las tareas necesitan secuenciarse para que tenga sentido mi aplicación 
+			- Con este tipo tenemos que:
+				{Sincronizar + Secuenciar}
+				- Cuando usamos wait() este es el que bloquea el hilo con el monitor del objeto y cede dicho monitor y despierta los otros hilos.
+
+
+    
+***************************************************************** 
+    
+PRIORIDADES E HILOS DEMONIO:
+
+-- Si alteramos la prioridad de  un hilo y ese hilo tienes hijos sus hijos van a heredar su prioridad, lo mismo pasa si declaramos un hilo como demonio y luego ese hilo tiene hijos seria demonios.
+
+- Rango de valores prioridad del hilo es de 1-10
+
+- 1 - Min Priority
+- 5 - Normal Priority
+- 10 - High Priority
+
+
+- Un hilo demonio:
+	- Es un hilo como todos los demás.
+	- Solamente cambia que he puesto a cierto lo de que es un hilo demonio. {setDaemon(True)}
+		- Los hijos de un hilo demonio son demonios ya que heredan esta propiedad del padre.
+		- Si el hilo demonio esta vivo y no hay hilos no demonios vivos el planificador lo finaliza.
+		- Pasa por distintos estados
+
+*****************************************************************
+			
+
+QUE ES EL PARALELISMO REAL? DIFERENCIA ENTRE MULTIPROGRAMACION Y MULTITAREA?
+
+-- Paralelismo real multitarea --&gt; En un instante dado, varias instrucciones estan siendo interpreadas ejecutándose en la unidad de control 
+
+-- Sólo un proceso está en ejecución --&gt; Es multitarea ---&gt; n Hilos entra en estado de ejecución y por cada hilo entra en un núcleo.
+
+-- La multitarea si acorta el tiempo de ejecucion de un proceso en cambio la multiprogramacion no pero claro solo si mi aplicacción es multiHilo (Multitarea). 
+-- El hilo tambien se llama tarea.
+-- Un metodo de una programa es un subprgrama, no es un hilo.
+
+
+*****************************************************************
+
+METODOS
+
+
+-- El metodo start lo que hace es llamar al metodo run del hilo
+
+-- En el metodo run es donde programo la tarea del hilo, cada hilo ha heredado la cabecera del prototipo.
+
+-- Start crea el hilo y llama al método run. No podemos llamar al metodo run directamente por que tiene que conocerlo el planificador de hilos.
+
+-- Runnable --&gt; O estan en ejecución o estan estan en preparados.
+
+-- EL hilo primario es en mi algoritmo el inicio, -- Proceso estado nuevo, Hilo primario estado nuevo solo coinciden aqui.
+
+-- Las colas son una cola de colas.
+
+-- Los hilos demonio se mueren en cascada.
+
+-- Los arboles se mueren de abajo a arriba.
+
+-- El metodo sleep se usa para marcar el ritmo, saca el hilo del estado de ejecución y sleep tiene un argumento obligatorio (cantidad de tiempo que este en estado dormido)
+
+-- Hay un método que nos sirve para despertar el hilo interrupt() (este método se usa para más cosas)
+
+-- Join() también tiene un argumento al igual que sleep, la diferencia es un método a dormir un hilo pero como el argumento es optativo si le paso tiempo hago lo mismo que el sleep pero cuando no le doy tiempo lo que digo que el hilo se detenga hasta que sus hijos terminen.
+
+-- Join() duerme el hilo hasta que pase el tiempo o hasta que sus hijos terminen sus procesos.
+
+-- Estado bloqueado y Dormido pasan todos los hilos.
+
+-- Estado esperando solo ocurre cuando los hilos comparten recursos.
+
+-- start() Devulve la referencia de un objeto de tipo hilo y pasa a preparado.
+
+- El metodo interrupted() es muy importante --&gt; Obliga al hilo a dejar de hacer lo que esta haciendo. 
+	- También se usa para despertarlo.
+
+- hilo1.sleep(tiempo);
+	- Puede salir por que se acaba el tiempo o por que alguien ha ejectuado para él, el interrupted()
+
+-hilo1.join(optativo);
+	- Quedate en estado dormido hasta que alguien te despierte o hasta que todos tus hijos terminen.
+	
+- join se despierta si el tiempo se acaba.
+- Si lo despiertan con interrupted()
+- O por que todos sus hijos hayan finalizado
+
+- En el metodo Run() es donde vamos a escribir lo que va a hacer el hilo.
+	- Este metodo me sirve para definir que este hilo que estoy creando con el Run(), es un hilo demonio. Por defecto es un hilo normal.
+	
+- start() --&gt; Hace una llamada al metodo run 
+
+- - yield()
+	- Cuando el hilo esta en ejecucuion y otro hilo solicitada para el un yield o el mismo lo hace. Lo que hace con esta instruccion es salir del estado de ejeccución voluntariamente y vuelve a la cola de preparados
+	- El planificador de hilos puede ser que no ejecute el yield, ya que la cola de hilos preparados puede estar vacia y si esta vacia no te saca.
+	- Solo se ejecuta si la cola de hilos preparados esta vacia.
+
+- start() --&gt; Lanza el hilo, lo arranca, eso es que se lo presenta al planificador de hilos para que lo vigile, vigile la ejecucion concurrente de los hilos cuando hay mas hilos que nucleos.
+		--&gt; Y start() una vez lanzado llama al metodo run()
+		
+- Si lanzamos primero el metodo run():
+	-- Es un error gravisimo, nunca llamar al metodo run de un hilo, los hilos se ejecutan desde start().
+	-- Si lo lanzo con run directamente ese hilo no va a estar vigilado por el planificador de hilos.
+	
+	
+	
+- sleep() y join()
+	- Bloquean el hilo.
+	- Diferencias:
+		- sleep 
+			- Tiene un argumento obligatorio {cantidad de tiempo}
+			- Bloqueamos al hilo referenciado durante un tiempo determinado
+			- Cuando despierta pasa al estado de hilo preparado
+			- Se puede despertar usando interrupt antes de tiempo
+		- join
+			- El argumento es optatitivo 
+			- Si todos hilos hijos de ese hilo han terminado este vuelve al estado de preparado {el padre}
+			- Se acaba el tiempo, y despierta
+			- Lo despierta con interrupt
+			
+			
+			
+***************************************************************	
+
+SECCIONES CRITICAS:
+
+-- No dejo que dos hilos accedan al recurso al mismo tiempo. (Con la puerta abierta adquiero el monitor del objeto sin problema si esta cerrada no)
+
+- La aplicacción multihilo tiene un problema 
+	- Cuando tenemos un objeto en memoria interna y hay varios hilos que quieren ir al mismo objeto.
+	- Los subprogramas no tienen este problema por que no acceden al objeto al mismo tiempo.
+	- Monitor de un objeto --&gt; Todos los objetos tienen monitor, y el monitor es como &quot;la puerta de acceso al objeto, en realidad es una bandera un bit&quot;, yo cada vez que accedo a un objeto
+	verifico si puedo acceder al monitor. Si lo adquiero entro.
+	- Dentro de un arbol hay que estar muy atento a los objetos que se comparten.
+
+	Los hilos de ese proceso se llaman hilos cooperantes (Hilos que comparten recursos) se ejecutan ++++++++++asincronicamente pero no sincronicamente.++++++++++++
+	- Seccion critica --&gt; bloque de codigo que solo se ejecuta si el hilo adquiere el monitor del objeto.
+	
+- Significa que ni siquiera el planificador de hilos puede interrumpir a un hilo que este dentro de una sección critica. (NO PUEDE)
+
+- Solo un hilo puede ser ejecutado, las secciones criticas invalidan el paralelismo.
+- Es decir si un hilo pillo ese código los demás hilos estarán esperando a que este termine.
+- La seccion critica puede estar dentro de:
+- Un método
+- Un bloque de código.
+
+- Con estos hilos aparece un nuevo estado llamado: ESPERANDO (Se pone a dormir no compite por la cpu).
+
+- La seccion critica anula la multitarea.
+
+- Solo un hilo puede acceder al objeto es decir de uno en uno.
+
+- La seccion critica garantiza que solo un hilo lo ejecuta.
+
+- Estos hilos pasan al estado esperando cuando estan esperando por conseguir el monitor del objeto es decir que hay otro hilo ejecutando una seccion critica  e usando el monitor del objeto en ese momento.
+
+- Cuando el hilo acaba de usar la sección critica es decir sale de la llave del método, se despiertan todos los otros hilos y el más rápido o el de  mayor prioridad tomara el monitor del objeto.
+
+- Monitor reentrante --&gt; Se puede llamar una sección critica desde otra.
+
+- Una vez determinamos las secciones peligrosas debemos encapuslarlas en secciones criticas.
+	- Formas encapsular:
+		- Defines un método y lo sincronizas.
+		- Si no esta en el objeto, lo defines en el hilo.
+
+		- start() no crea un nuevo espacio de direcciones, pero si que carga en el espacio de memoria de ese proceso el bloque del ejecutable.
+
+		- Las secciones criticas se hacen para proteger los objetos.
+			- Las secciones criticas solo pueden ser ejecutadas por un hilo cada vez (hasta que termine ese hilo otro no podra acceder)
+
+		- Si estamos usando un lenguaje que no tiene monitor reentrante
+			- Si tenemos un metodo sincronizado no podemos llamar a otro metodo sincronizado por que bloqueamos la aplicación (es decir, el hilo no encuentra el monitor y no lo suelta)
+					
+			
+- Cuando un hilo quiere entrar en un objeto tiene que pedir permiso.
+		- Finalizar la sección critica implica liberar el monitor del objeto y que todos los hilos que estan esperando por el monitor del objeto se despiertan y pasan a estado listo.
+		
+		
+- Los metodos wait() y notify() van a estar siempre dentro de una sección critica.
+
+*****************************************************************
+COMO CREAR UN HILO?
+
+	- Definir una clase para ese hilo, esa clase estiende la clase hilo.
+		- Las clases que diferencian los distintos hilos se diferencian en los atributos y en el método run.
+		- Todos los hilos tienen en comun que son una estension de la clase Hilo.
+		- Todos los hilos tienen por defecto:
+			- Nombre
+		- Podemos darle nombre dentro o fuera del constructor
+		- Todos los hilos nacen con una prioridad predefinida por la prioridad que tenga el hilo padre.
+		- La prioridad normal es 5
+		- La prioridad va entre el (1) y el (10)
+
+
+*****************************************************************
+
+IMPORTANTE:
+
+-Todos los hilos heredan la prioridad de su hilo padre a no ser que yo modifique la prioridad del hijo.
+
+	- Un hilo de mayor prioridad va a tener siempre mas oportunidades de ejecucion, ya que en la cola se posicionan delante de los que tengan menos prioridad.
+	
+	- Si el padre elimina a uno de sus hilos no se realiza limpieza ya que comparten memoria...
+
+- Los hilos van a tener nombre, pero su valor por defecto es = ' hilo1, hilo2, hilo3.... ' aunque se lo podemos dar nosotros usando el metodo setName() --&gt; return void()
+-
+	- Run() pone en ejecución el hilo.
+	- Si llamamos a run() sin llamar a start() entonces el hilo se queda sin ser atendido por el planificador por lo cual sus otros hilos no van a ser gestionados. (Revisar)
+	- Es un error muy grave hacerlo sin llamar a start() primero.
+	
+	- Si solamente leen del mismo recurso podemos dejarles leer a todos ellos.
+- Pero si queremos que solo uno lea o escriba en dicho metodo tenemos que sincronizar.
+- El codigo de secuenciacion se mete siempre dentro de la seccion critica.
+	- Se secuencia usando el metodo wait() y notify()
+	- Tienen que estar los dos presentes no puede haber uno sin el otro.
+
+- Si un hilo esta dentro del monitor del objeto y le decimos sleep() 
+	- Esto hace que se pone el hilo a dormir pero no cede el monitor del objeto por lo cual he bloqueado toda la aplicacion.
+	- El que tiene el monitor del objeto esta durmiendo y todos los otros estan bloqueados.
+
+- Wait()
+	- Manda al hilo al estado [esperando] y libera el monitor del objeto.
+	- Siempre se lanza dentro de una sección critica.
+
+- Una vez que un hilo se reincorpora lo hace desde donde salio.
+
+- Solo se necesita una secuencia cuando son hilos de distitnas clases.
+
+- Para verificar las banderas se hace con wait()
+
+- Todos los hilos se pueden estar ejecutando paralelamente y concurrentemente
+	- Esta concurrencia me la da el planificador de hilos, pero esto solo se produce cuando hay mas hilos que nucleos.
+	- Si no hay mas hilos que nucleos la cola de hilos preparados esta vacia.
+
+- Si yo tengo en ejecucion un monton de hilos, lo mas probable es que se bloqueen ellos solos, cuando pasan al estado bloqueado lo que hace la unidad de control es aprovechar el tiempo.
+	- Todos los hilos que estan en la cola de preparados se va a mover rapidamente.
+	- Las rutinas de cuanto de ejecucion solo se utilizan cuando tenemos mas hilos que nucleos ya que estos van a formar parte de la cola de preparados.
+
+- La unica diferencia entre hilo normal y hilo demonio es una bandera.
+
+- Si todos los hilos vivos de un proceso son hilos demonio, quiere decir que se ha terminado y se van parando los hilos demonio en cascada.
+- Cualquier hilo puede pasar por estado dormido (Usando sleep() y join())
+
+- Cada nodo es un arbol que puede tener otros nodos o no.
+
+-Estado Esperando:
+
+	- Por el estado wait() no pasan todos los hilos, solo pasan aquellos hilos que almenos comparten un recurso. (Hilo Cooperante)
+	- Hilos que salieron rebotados al intentar conseguir el monitor del objeto.
+
+- Cuando no estan secuenciados, la llave de fin de la seccion critica despierta a todos los hilos. Despierta a los que no consiguieron entrar.
+- El notify despierta a los que entraron con wait() es obligatorio cuando secuenciamos.
+
+- interrupt es un metodo que le manda al hilo dejar de hacer lo que estaba haciendo.
+	- No saca a un hilo de un metodo sincronizado.
+
+*****************************************************************
+
+OTROS DATOS:
+
+
+- El hilo primario es el nodo raiz de la aplicación (del árbol que voy a construir)
+
+- Proceso un árbol n_ario de hilos como mínimo un hilo = hilo primario &quot;Es el nodo raíz del árbol&quot;
+
+-- // Importante
+	-- En la cola de hilos preparados siempre pienso por defecto que esta vacia (La cola existe pero esta vacia)
+	-- El hilo no se saca de ejecución  siempre y cuando la cola este vacia.
+
+-- La cola de hilos preparados es muy posible que este vacía, pero hay que recordar que existe igualmente.
+
+- Un arbol es un conjunto de arboles
+
+- Cuando el arbol es un indice de busqueda
+
+- Cada nodo de ese arbol es un ejecutable, el arbol no es un proceso es un fichero desplegado en memoria interna (fichero de datos), lo uso para encontrar en un conjunto enorme de datos.
+
+- El arbol quiero que sea binario y equilibrado
+
+- Un arbol equilibrado es lo mas eficiente para buscar.
+
+- Por que lo queremos binario y equilibrado? -- Binario es lo mas eficiente, 
+
+- Hay una rutina que equilibra el arbol y lo hace primero verificando el nivel de cada una de las ramas.
+
+- Esta rutina lo que va a hacer es seleccionar otro nodo raiz para equilibrarlo. Vuelve a colocar el nodo raiz en otro sitio.
+
+- Si una rama tiene mas de una diferencia el arbol esta desiquilibrado.
+
+- En disco no hay nada mas que ficheros.
+
+- El hilo primario evalua si tiene arguementos:
+	- Si no tiene argumentos --&gt; Finaliza
+	- Pero si tiene almenos uno --&gt; Empieza
+	- Por cada argumento se lanza un hilo.
+	- Si el hilo primario no va a realizar ningun otro proceso mas ademas de instanciar sus hijos puede autobloquearse con join
+	para asi dejar de competir por la UCP.
+
+- Dentro del metodo run del hilo es donde escribimos la tarea.
+
+
+
+
+
+
+
+
+
+</rich_text>
+					</node>
+				</node>
+			</node>
+		</node>
+	</node>
+</cherrytree>
