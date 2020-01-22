@@ -402,7 +402,7 @@ public class Thread extends Object implements Runnable
 
 
 
-#### Como se crea un hilo demonio?
+### Como se crea un hilo demonio?
 
 ---
 
@@ -416,7 +416,7 @@ public class Thread extends Object implements Runnable
 
 
 
-#### Saber si un hilo es demonio
+### Saber si un hilo es demonio
 
 ---
 
@@ -436,7 +436,7 @@ public class Thread extends Object implements Runnable
 
 
 
-#### Ejemplo Hilo Demonio
+### Ejemplo Hilo Demonio
 
 ---
 
@@ -536,4 +536,80 @@ public class CDemonio extends Thread
 - Una llamada al método `sleep` solicita que el hilo actualmente en ejecución cese durante un tiempo especificado.
   - `Thread.sleep(milisegundos);`
   - `Thread.sleep(milisegundos, nanosegundos);`
-- Se puede observar que el método `sleep` al igual que `yield` es **static**
+- Se puede observar que el método `sleep` al igual que `yield` es **static**. Operan sobre el hilo que actualmente se esté ejecutando.
+- Cuando un hilo despierta, no continúa en ejecución, sino que se mueve al estado **preparado**. Pasará a ejecución cuando el planificador lo indique. Esto quiere decir que una llamada a `sleep` bloqueará el hilo por un tiempo superior al especificado.
+- La clase **Thread** proporciona también `interrupt`. Cuando un hilo dormido recibe este mensaje, pasa automáticamente al estado preparado, y cuando pase a ejecución, ejecutará su manejador **InterruptedException**. 
+
+
+
+#### Esperando
+
+---
+
+- `wait()` mueve un hilo en ejecución al estado esperando y el método `notify()` mueve un hilo que esté esperando al estado preparado; `notifyAll()` **mueve todos los hilos que estén esperando al estado preparado**.
+
+> ***IMPORTANTE***
+>
+> > Estos métodos son usados para sincronizar hilos.
+
+
+
+### Planificación De Hilos
+
+---
+
+- La ejecución de múltiples hilos sobre una única UCP, en cierto orden , es llamada planificación.
+- El hilo se elige según su prioridad más alta. Esto es, la planificación de la UCP es totalmente por derecho de prioridad.
+- Cada hilo java tiene asignado una prioridad definida por un valor numérico entre `MIN_PRIORITY` y  `MAX_PRIORITY` (constantes de la clase **Thread**), de forma que varios hilos estén preparados, será elegido para su ejecución el de mayor prioridad. Solamente cuando la ejecución del hilo se detenga por cualquier causa, podrá ejecutarse un hilo de menor prioridad; y cuando un hilo con prioridad más alta que el que actualmente se esta ejecutando se mueva al estado **preparado** pasará automáticamente a ejecutarse.
+- Sería bueno que nuestros hilos cedieran voluntariamente el control algunas veces. Un hilo puede renunciar a su derecho de ejecutarse para ceder el control a otro de la misma prioridad llamando al método `yield`. Un intento de ceder la UCP a hilos de menor prioridad se ignorará.
+- La planificación por prioridades puede verse alterada por el planificador.
+
+
+
+### Qué ocurre con los hilos que tengan igual prioridad?
+
+---
+
+- Cuando todos los hilos que compiten por la UCP tienen la misma prioridad, el planificador elige al siguiente según el orden resultante de aplicar el algoritmo round-robin. La cola de hilos listos para ejecutarse se trata como una cola circular FIFO. La UCP será cedida a otro hilo bien porque:
+  - Un hilo de prioridad más alta ha alcanzado el estado preparado.
+  - Cede la UCP, o su método `run` finaliza.
+  - Se supera el cuanto: 
+    - Tiempo máximo que un hilo puede retener la UCP.
+    - Esta condición solo ocurre en sistemas que soporten el cuanto.
+
+
+
+#### Cómo permitir la ejecución de hilos con prioridades inferiores?
+
+---
+
+Muchos hilos del sistema son detenidos de vez en cuando, por motivos diferentes. Cuando todos los hilos de prioridad 10 estén detenidos, el sistema asigna cuantos a los hilos preparados de prioridad 9.
+
+
+
+> ***IMPORTANTE***
+>
+> > La mayoría de los hilos consumen su tiempo durmiendo, lo que permite la ejecución de los hilos de prioridades bajas con una frecuencia, probablemente, un poco inferior.
+
+
+
+### Asignar prioridades a los hilos
+
+---
+
+***CONTINUARÁ....***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
