@@ -20,16 +20,18 @@
 
 ## Concepto de proceso?
 
-#### Definición:
+
+
+### Definición:
 
 - Es una instancia de un programa
 - Es propietario de otros recursos que se crean durante la vida de dicho proceso y se destruyen cuando termina.
 
 - Es un árbol e-nario de hilos, es decir, es al menos un hilo, y se llama hilo primario.
 
+  
 
-
-##### Un proceso posee:
+### Un proceso posee:
 
 ---
 
@@ -60,7 +62,7 @@ En los procesos es posible 4 transiciones:
 
    
 
-##### Todos Los Estados Posibles:
+### Todos Los Estados Posibles:
 
 ---
 
@@ -82,7 +84,7 @@ En los procesos es posible 4 transiciones:
 
 
 
-#### Definición
+### Definición
 
 ---
 
@@ -96,7 +98,7 @@ En los procesos es posible 4 transiciones:
 
 
 
-##### Información
+### Información
 
 ---
 
@@ -107,7 +109,9 @@ En los procesos es posible 4 transiciones:
 
 Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, el estado de los registros de la UCP y su propio contador de programa.
 
-***Comparten***:
+
+
+### Comparten
 
 ---
 
@@ -125,16 +129,17 @@ Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, e
 
   
 
-##### Que ventajas aporta un hilo respecto a un proceso?
+### Que ventajas aporta un hilo respecto a un proceso?
 
 ---
 
 1. Debido a que los hilos comparten {**espacio de memoria, el código y los recursos**} su ejecución es más económica que la de los procesos.
+
 2. Mayor facilidad al resolver problemas complejos.
 
+   
 
-
-##### Que es el paralelismo Real?
+### Que es el paralelismo Real?
 
 ---
 
@@ -146,7 +151,7 @@ Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, e
 
   
 
-##### Que es el Multi-Threading
+### Que es el Multi-Threading
 
 ---
 
@@ -154,7 +159,7 @@ Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, e
 
 
 
-##### Estados de un hilo
+### Estados de un hilo
 
 ---
 
@@ -199,7 +204,7 @@ public static void inicializarHilos()
 
 
 
-##### Como se crean los hilos?
+### Como se crean los hilos?
 
 ---
 
@@ -243,7 +248,7 @@ public class Test
 
 
 
-***INFORMACIÓN:***
+### ***INFORMACIÓN:***
 
 ---
 
@@ -281,7 +286,7 @@ public class Hilo extends Object implements Runnable
 
 
 
-###### Atributos:
+#### Atributos:
 
 ---
 
@@ -294,7 +299,7 @@ public class Hilo extends Object implements Runnable
 
 
 
-###### Métodos:
+#### Métodos:
 
 ---
 
