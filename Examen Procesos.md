@@ -90,11 +90,23 @@ En los procesos es posible 4 transiciones:
 
 - Secuencia de código que está en ejecución dentro del contexto de un proceso, en el mismo espacio de direcciones.
 
+- Los hilos se ejecutan simultáneamente y concurrentemente
+
+- El hilo siempre es una instancia de la clase Thread, cualquier instancia de esta clase es un hilo.
+
   
 
 > ***IMPORTANTE***
 >
 > > Cuando hablamos de hilos, podemos asumir que la cola de hilos está vacía siempre y cuando los hilos se ejecuten asincrónicamente.
+> >
+> > Se ejecutan tantos hilos como núcleo tengamos disponibles.
+> >
+> > La cola de hilos preparados son los hilos de mi proceso que están en estado preparado pero no ejecutándose debido a que no hay núcleo disponible.
+> >
+> > Si se lanzan más hilos que núcleos se monta un problema ya que hay que atender a los hilos en estado preparado, hay que hacer avanzar esa cola ya que si no hay hilos que no se pueden ejecutar. Esto es la ejecución concurrente.
+> >
+> > Un proceso en ejecución es un árbol de hilos que está cambiando.
 
 
 
@@ -105,9 +117,8 @@ En los procesos es posible 4 transiciones:
 - Los hilos comparten la UCP de la misma forma que lo hacen los procesos, pueden crear hilos hijo y se pueden bloquear. Mientras un hilo esté bloqueado se puede ejecutar otro hilo del mismo proceso.
 - En la UCP puede haber varios programas con varios procesos ejecutándose concurrentemente (Multi-Tarea) y a su vez un proceso puede crear varios hilos hijo y ejecutarlos de forma concurrente.
 
-
-
-Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, el estado de los registros de la UCP y su propio contador de programa.
+- Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, el estado de los registros de la UCP y su propio contador de programa.
+- Cuando creamos más hilos, el hilo nuevo será creado en el mismo espacio de direcciones que el hilo primario.
 
 
 
@@ -133,9 +144,11 @@ Cada hilo se ejecuta en forma estrictamente secuencial y tiene su propia pila, e
 
 ---
 
-1. Debido a que los hilos comparten {**espacio de memoria, el código y los recursos**} su ejecución es más económica que la de los procesos.
+1. La creación de hilos para el sistema operativo es menos costosa que la creación de procesos
 
 2. Mayor facilidad al resolver problemas complejos.
+
+3. Un proceso solo puede ejecutarse 1 a la vez, mientras que los hijos se pueden ejecutar tantos hilos como núcleos tengamos.
 
    
 
@@ -368,18 +381,18 @@ public class Thread extends Object implements Runnable
 | `boolean isInterrupted()`         | Verifica si este hilo ha sido interrumpido                   | **boolean**     |
 | `boolean isAlive()`               | Verifica si este hilo esta vivo (no ha terminado)            | **boolean**     |
 | `void destroy()`                  | Destruye este hilo sin realizar ninguna operación de limpieza. | **No retorna ** |
-| `void interrupt()`                | Envía este hilo al estado preparado                          | **No retorna**  |
-| `void join()`                     | Espera indefinidamente o el tiempo especificado, a que este hilo termine | **No Retorna**  |
-| `void run()`                      | Contiene el código que el hilo ejecutará cuando pasa al estado de ejecución. | **No Retorna**  |
-| `void setDaemon(boolean on)`      | Define este hilo como un demonio o como un hilo de usuario   | **No Retorna**  |
-| `void setName(String name)`       | Cambia el nombre al hilo                                     | **No Retorna**  |
-| `void setPriority(int prioridad)` | Cambia la prioridad de este hilo                             | **No Retorna**  |
-| `static void sleep()`             | Envía a este hilo a dormir por el tiempo especificado        | **No Retorna**  |
-| `void start()`                    | Inicia la ejecución de este hilo, Java invoca al método run del hilo | **No Retorna**  |
-| `static void yield()`             | Detiene temporalmente la ejecución de este hilo para permitir la ejecución de otros | **No Retorna**  |
-| `void notify()`                   | Despierta **un** hilo de los que están esperando por el monitor del objeto | **No Retorna**  |
-| `void notifyAll()`                | Despierta **todos** los hilos que están esperando por el monitor del objeto | **No Retorna**  |
-| `void wait()`                     | Envía este hilo al estado de espera, hasta que otro hilo ejecute `notify()` o `notifyAll()` o hasta que acabe el tiempo. | **No Retorna**  |
+| `void interrupt()`                | Envía este hilo al estado preparado                          | **void**        |
+| `void join()`                     | Espera indefinidamente o el tiempo especificado, a que este hilo termine | **void**        |
+| `void run()`                      | Contiene el código que el hilo ejecutará cuando pasa al estado de ejecución. | **void**        |
+| `void setDaemon(boolean on)`      | Define este hilo como un demonio o como un hilo de usuario   | **void**        |
+| `void setName(String name)`       | Cambia el nombre al hilo                                     | **void**        |
+| `void setPriority(int prioridad)` | Cambia la prioridad de este hilo                             | **void**        |
+| `static void sleep()`             | Envía a este hilo a dormir por el tiempo especificado        | **void**        |
+| `void start()`                    | Inicia la ejecución de este hilo, Java invoca al método run del hilo | **void**        |
+| `static void yield()`             | Detiene temporalmente la ejecución de este hilo para permitir la ejecución de otros | **void**        |
+| `void notify()`                   | Despierta **un** hilo de los que están esperando por el monitor del objeto | **void**        |
+| `void notifyAll()`                | Despierta **todos** los hilos que están esperando por el monitor del objeto | **void**        |
+| `void wait()`                     | Envía este hilo al estado de espera, hasta que otro hilo ejecute `notify()` o `notifyAll()` o hasta que acabe el tiempo. | **void**        |
 
 > ***IMPORTANTE***
 >
@@ -412,7 +425,7 @@ public class Thread extends Object implements Runnable
     hilo.setDaemon(true);--
     ```
 
-- Si un hilo es demonio, entonces cualquier hilo que este cree será un hilo demonio.
+- Si un hilo es demonio, entonces cualquier hilo que este hilo cree, será un hilo demonio.
 
 
 
@@ -527,6 +540,18 @@ public class CDemonio extends Thread
 
 
 
+### Diferencias entre `sleep` y `join` 
+
+---
+
+- **`sleep`** 
+  - Tiene un argumento obligatorio (cantidad de tiempo)
+  - Se puede despertar usando **`interrupt`**
+- **`join`** 
+  - Argumento optativo (cantidad de tiempo)
+  - Si todos sus hijos hilos han muerto, este vuelve al estado preparado
+  - Se puede despertar usando **`interrupt`**.
+
 #### Dormido
 
 ---
@@ -597,19 +622,302 @@ Muchos hilos del sistema son detenidos de vez en cuando, por motivos diferentes.
 
 ---
 
-***CONTINUARÁ....***
+- Los hilos heredan su prioridad del hilo que lo crea.
+- Es posible aumentar o disminuir su prioridad.
+  - Para modificar su prioridad debemos usar el método `setPriority`.
+
+| Constante     | Valor                 |
+| :------------ | :-------------------- |
+| MIN_PRIORITY  | 1                     |
+| NORM_PRIORITY | 5 (valor por omisión) |
+| MAX_PRIORITY  | 10                    |
+
+- Para obtener la prioridad usamos el método `getPriority`
+
+  - ```java
+    int p = getPriority();
+    ```
+
+    - Este método devuelve un valor entre `MIN_PRIORITY` y `MAX_PRIORITY`.
+
+#### Qué sucede si asignamos a todos los hilos contador de la misma prioridad?
+
+---
+
+- El planificador elegirá el siguiente para ejecucción según el modelo **round-robin** y en el caso de Windows asignará, adémas, la UCP por cuantos.
 
 
 
+### Sincronización de hilos
+
+---
+
+- ***Hilo Independiente:***
+
+  ---
+
+  - Hilo que no interfiere en la ejecución de cualquier otro hilo que se ejecuta concurrentemente con él.
+  - Hilos que no comparten ningún recurso.
+  - Se ejecutan al mismo tiempo siempre que tengan núcleo (asincrónicamente).
+
+- ***Hilo Cooperantes:***
+
+  ---
+
+  - Dos o más hilos ejecutándose concurrentemente que deben acceder a los mismos recursos y/o datos.
+  - En estos casos debemos tomar el cotrol de la situación para asegurar que cada hilo acceda a los recursos de una manera previsible, sincronizando las actividades que desarrollan cada uno de ellos.
+  - Operaciones de sincronización:
+    - Java nos proporciona los siguientes elementos de sincronización:
+      - **Sección crítica**
+      - **`wait`** 
+      - **`notify`**/**`notifyAll`**
+    - En general un hilo se sincroniza con otro hilo poniéndose él mismo a dormir.
+      - Antes de ponerse a dormir, debe avisar al sistema del evento que debe ocurrir para reanudar su ejecución.
+        - Una vez ocurra ese evento el sistema despertará al hilo permitiéndole continuar su ejecución.
+    - Si un hilo padre necesita esperar hasta que uno o más hilos finalicen, se pone él mismo a dormir hasta que el hilo o hilos hijo pasen al estado muerto.
+    - Un hilo se pone a dormir (se bloquea), no entra en la planificación del sistema;
+      - El planificador no le asigna tiempo de UCP y, por consiguiente, detiene su ejecución.
 
 
 
+> ***IMPORTANTE:***
+>
+> > **`wait`** y **`notify`** o **`notifyAll`** son métodos que dependen el uno del otro dentro de una sección critica. Ya que un hilo en estado **esperando** solamente se va a despertar si se ejecuta el **`notify`** (despierta un hilo de forma aleatoria)  se ejecuta un **`notifyAll`**. **Es obligatorio el uso de uno con el otro y solo se colocan dentro de una sección critíca.**
+> >
+> > Diferencia entre **`notify`**  y **`notifyAll`**?
+> >
+> > - **`notify`** despierta a solo un hilo en estado **esperando**, mientras que, **`notifyAll`** despierta a todos los hilos en estado **esperando**.
 
 
 
+### Sección Crítica
+
+---
+
+#### Definición:
+
+---
+
+- Sección de código que en un instante dado tiene que acceder exclusivamente a un objeto de datos compartido.
+- Es un bloque de código que se define como atómico, es decir, se ejecuta entero sin interrupciones.
+- Bloque de código que solo se ejecuta si el hilo consigue el monitor del objeto.
+- Bloque de código que se ejecuta sobre un determinado objeto.
+- Secciones de código sincronizadas.
+- Es una operación atómica, es decir, que para cualquier hilo deben ejecutarse de una vez.
 
 
 
+### Crear una sección crítica
+
+---
+
+- Cada objeto tiene un monitor.
+  - Ese monitor es controlado, como mucho, por un solo hilo.
+  - El monitor controla el acceso al código sincronizado del objeto; en otras palabras, a la sección crítica.
+
+### **Cómo se crea una sección crítica?**
+
+---
+
+- Forma sencilla:
+  - Agrupar código definido como crítico en un método declarado como **`synchronized`**.
+
+```java
+public synchronized int calculos(String hilo)
+{
+    if (ind >= tamano) return tamano;
+    double x = Math.random();
+    System.out.println(hilo + "tomo la muestra "+ ind);
+    asignar(x, ind);
+    ind++;
+    return ind;
+}
+```
 
 
+
+- Un hilo que quiera ejecutar el código sincronizado de un objeto debe primero intentar adquirir el control del monitor de ese objeto. 
+  - Si el monitor está disponible, esto es,  si no está controlado por otro hilo, entonces lo adquirirá y ejecutará el código sincronizado y cunado finalice liberará el monitor. 
+    - En cambio, si el monitor está controlado por otro hilo, entonces el hilo que lo intentó obtener el monitor del objeto, se **bloqueará** y solo retornará al estado **preparado** cuando el **monitor esté disponible.**
+
+- ```java
+  synchronized (objecto)
+  {}
+  ```
+
+
+
+> ***IMPORTANTE:***
+>
+> > Una sección crítica solo se puede emplear para sincronizar hilos involucrados en una única tarea.
+> >
+> > Es mejor aplicar la sincronización a nivel del método que a un bloque de código. La primera técnica facilita más el diseño orientado a objetos y proporciona un código más fácil de interpretar y por lo tanto, más fácil de depurar y de mantener.
+
+
+
+### Monitor Reentrante
+
+---
+
+- Ocasión en la que necesitamos que un método sincronizado tenga que llamar a otro método también sincronizado de la misma clase.
+  - Un hilo vuelve a tomar el control de un monitor del que ya lo tiene, porque los monitores Java son reentrantes. Sólo funciona en sistemas operativos que soporten monitores reentrantes.
+
+```java
+public class CDatos
+{
+    // ...
+    
+    public synchronized void asignar(double x , int i)
+    {
+        dato[i] = x;
+    }
+    
+    public synchronized int calculos(String hilo)
+    {
+        if (ind >= tamano) return tamano;
+        double x = Math.random();
+        System.out.println(hilo + "tomo la muestra "+ ind);
+        asignar(x, ind);
+        ind++;
+        return ind;
+    }
+}
+```
+
+
+
+### Utilizar  wait y notify
+
+---
+
+- Estos métodos nos proporcionan una alternativa más para compartir un objeto.
+
+  - Permiten sincronizar hilos involucrados en tareas distintas, una dependiente de la otra.
+
+- **`wait`** 
+
+  -  Se usa dentro de un while
+
+  - Si usamos **`wait`** tenemos que tener obligatoriamente **`notifyAll`** en nuestra sección crítica.
+
+    
+
+### Información Importante
+
+---
+
+- Cada "objeto" tiene un monitor. El monitor controla el acceso al código, sincronizado del objeto; En otras palabras a la sección crítica.
+- El método **`notify`** despierta sólo un hilo de los que estén esperando por ese monitor.
+  - Si hay varios hilos esperando, se elige uno arbitrariamente.
+    - El hilo despertado competirá de manera habitual con el resto de los hilos que estén en el estado preparado, por adquirir la UCP.
+  - Este método solo puede ser llamada por un hilo que haya adquirido el control del monitor.
+
+- Un hilo se pone a esperar por el monitor de un determinado objeto invocando al método **`wait`**.
+
+  - El hilo cede el monitor del objeto.
+
+  - ```java
+    void wait([milisegundos[ nanosegundos]])
+    ```
+
+- El método **`wait`** envía al hilo actualmente en ejecución al estado de espera, hasta que otro hilo (el que tiene el control del monitor del objeto), invoque al método **`notify`**, **`notifyAll`** , **`interrupt`**, o bien hasta que transcurra el tiempo especificado.
+  
+  - Cuando el hilo se pone a dormir (usando **`wait`**), cede el control del monitor del objeto, lo que permitirá a otro hilo que este esperando por el, adquirirlo.
+  
+    
+
+### Diferencias entre **`sleep`** y **`wait`**.
+
+---
+
+- **`sleep`** 
+  - Este método duerme el hilo pero el hilo no cede el monitor del objeto, por eso no se puede usar en secciones críticas.
+- **`wait`** 
+  - Duerme el hilo y cede el monitor del objeto.
+  - Este método depende del método **`notify/notifyAll`**, es decir, no puede existir uno sin el otro.
+  - Se usa para secuenciar en secciones críticas.
+
+
+
+> ***IMPORTANTE:***
+>
+> > No confundir estos dos métodos con las diferencias entre **`sleep`**  y **`join`** .
+
+
+
+### Diferencias  entre `notify` y `notifyAll`
+
+---
+
+- **`notify`**
+  - Despierta a solo un hilo que este esperando por el monitor del objeto.
+  - Es más rápido que `notifyAll` 
+    - Su forma de proceder nos puede llevar a situaciones no deseadas cuando tenemos varios hilos esperando por el mismo monitor de objeto.
+  - Rara vez se utiliza y se recomienda usar **`notifyAll`** 
+- **`notifyAll`**
+  - Despierta a todos los hilos esperando por el monitor del objeto.
+  - Es más lento que **`notify`** .
+  - Se recomienda usarlo en vez de usar **`notify`**.
+
+
+
+> ***IMPORTANTE:***
+>
+> > **`wait`** , **`notify/notifyAll`** e **`interrupt`**, deben ser invocados desde código sincronizado.
+
+
+
+### Interbloqueo:
+
+---
+
+- **Inanición**
+  - Ocurre cuando un hilo se queda completamente bloqueado y no puede progresar por que no puede acceder a los recursos que necesita.
+- **Interbloqueo**
+  - Condición recíproca por la que están esperando dos o más hilos y que nunca puede ser satisfecha.
+
+> ***IMPORTANTE***
+>
+> > La mejor manera de evitar el **interbloqueo** es prevenirlo, mejor que probar y detectarlo.
+
+
+
+### Grupo de Hilos
+
+---
+
+- Mecanismo para agrupar varios hilos en un único objeto con el fin de poder manipularlos todos de una vez.
+
+  
+
+### Grupo predefinido
+
+---
+
+Cuando creamos un hilo sin especificar su grupo en el constructor, Java lo coloca en el mismo grupo (grupo actual) del hilo bajo el cual se crea (hilo actual).
+
+```java
+Thread(ThreadGroup grupo, String nombreHilo) // Constructorr de grupo de hilos
+ 
+// Ejemplo add hilo a grupo
+public static void main(String[] args)
+{
+    //Grupo predefinido
+    ThreadGroup consumidores = Thread.currentThread().getThreadGroup();
+    
+    CMensaje mensaje = new CMensaje();
+    Consumidor consumidor1 = new Consumidor(mensaje, consumidores, "consumidor1");
+    // Se le esta pasando el mensaje, el grupo de hilos y el nombre del hilo a añadir al grupo.
+}
+```
+
+### Grupo explícito
+
+---
+
+- Para añadir un hilo a un grupo determinado primero crearemos el grupo.
+
+```java
+ThreadGrupo consumidores = new ThreadGroup("consumidores");
+```
 
